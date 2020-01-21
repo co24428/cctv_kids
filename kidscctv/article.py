@@ -24,6 +24,7 @@ url2 = "http://www.newsis.com/search/schlist/?val=%25EC%2596%25B4%25EB%25A6%25B0
 # 3페이지
 url3 = "http://www.newsis.com/search/schlist/?val=%25EC%2596%25B4%25EB%25A6%25B0%25EC%259D%25B4%25EB%25B3%25B4%25ED%2598%25B8%25EA%25B5%25AC%25EC%2597%25AD&sort=acc&jo=sub&bun=all_bun&sdate=&term=allday&edate=&s_yn=Y&catg=1&t=1&page=3&"
 url_list = [url1, url2, url3]
+# url_list = [url1]
 
 title = list()
 link = list()
@@ -41,11 +42,11 @@ for url in url_list:
     articles = driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[3]/ul')
     article = articles.find_elements_by_class_name('bundle')
     for tmp in article:
-        title.append(tmp.find_element_by_tag_name("a").text)
+        title.append(tmp.find_element_by_tag_name("a").text.replace("'", " "))
         link.append(tmp.find_element_by_tag_name("a").get_attribute("href"))
-        content.append( (tmp.find_element_by_class_name("txt1").text[:100] + "..."))
+        content.append( (tmp.find_element_by_class_name("txt1").text[:100].replace("'", " ") + "..."))
         reporter_date = tmp.find_element_by_class_name('date').text.split("|")
-        reporter.append(reporter_date[0])
+        reporter.append(reporter_date[0].strip())
         date.append(reporter_date[1].strip())
 
 
@@ -80,6 +81,9 @@ for url in url_list:
 #     print(i)
 
 
+# pdf = open('hello.pdf', 'rb')
+# mem_file = io.BytesIO(pdf.read())
+
 
 thumbnail = list()
 for i in range(0,60):
@@ -88,7 +92,8 @@ for i in range(0,60):
     # print(full_path)
     try:
         file = open(full_path, 'rb')
-        img = file.read().encode('utf-8')
+        img = file.read()
+        print(len(img))
         thumbnail.append(img)
     except:
         thumbnail.append(None)
@@ -99,44 +104,30 @@ for i in range(0,60):
 # for i in thumbnail:
 #     print(i)
 
+
 for i in range(0,60):
-    ar = list()
-    ar = [title[i],]
-    sql = "INSERT INTO CCTV_ARTICLE(TITLE) VALUES ('"+ title[i].replace(",", "") +"')"
-        
-    # if thumbnail[i] == "1":
-    #     ar = [
-    #         title[i],
-    #         thumbnail[i],
-    #         reporter[i],
-    #         content[i],
-    #         date[i],
-    #         link[i]
-    #     ]
-    #     # sql = """
-    #     #     INSERT INTO CCTV_ARTICLE(TITLE, THUMBNAIL, REPORT, CONTENT, PUB_DATE, LINK) 
-    #     #     VALUES (%s, %s, %s, %s, TO_DATE('%s', 'YYYY.MM.DD HH24:MI'), %s)
-    #     #     """
-    #     sql = """
-    #         INSERT INTO CCTV_ARTICLE(TITLE, THUMBNAIL, REPORT, CONTENT, PUB_DATE, LINK) 
-    #         VALUES (왜, 안, 되, 지, SYSDATE, 흠)
-    #         """
-    # else:
-    #     ar = [
-    #         title[i],
-    #         reporter[i],
-    #         content[i],
-    #         link[i]
-    #     ]
-    #     sql = """
-    #         INSERT INTO CCTV_ARTICLE(TITLE, REPORT, CONTENT, LINK) 
-    #         VALUES (%s, %s, %s, %s)
-    #         """
-    print(ar)
-    print(type(ar[0]))
-    print(sql)
-    cursor.execute(sql)
-    # cursor.execute(sql)
+    # sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK, THUMBNAIL) VALUES('" \
+    #     + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
+    #     + reporter[i] + "', '" + content[i] + "', '" + link[i] + "', :0 )"
+#    
+    print("===================================================")
+    if thumbnail[i]:
+        sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK, THUMBNAIL) VALUES('" \
+        + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
+        + reporter[i] + "', '" + content[i] + "', '" + link[i] + "', :0 )"
+        print(sql)
+
+        cursor.execute(sql, [thumbnail[i]])
+    else:
+        sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK) VALUES('" \
+        + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
+        + reporter[i] + "', '" + content[i] + "', '" + link[i] + "')"
+        print(sql)
+
+        cursor.execute(sql)
+#
+
+conn.commit()
 
 
 # 이미지가 필요할 때

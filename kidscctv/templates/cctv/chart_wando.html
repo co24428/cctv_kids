@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CHART_WANDO</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css"/>
+</head>
+<body>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td><B>NO</B></td>
+            <td><B>BIG_ARRD</B></td>
+            <td><B>SMALL_ADDR</B></td>
+            <td><B>CCTV_YN</B></td>
+            <td><B>CCTV_NUM</B></td>
+            <td><B>SISUL</B></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for one in list %}
+        <tr>
+            <td>{{one.no}}</td>
+            <td>{{one.big_addr}}</td>
+            <td>{{one.small_addr}}</td>
+            <td>{{one.cctv_yn}}</td>
+            <td>{{one.cctv_num}}</td>
+            <td>{{one.sisul}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CHART_KYEONG</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <style>
+        .bd-placeholder-img {
+          font-size: 1.125rem;
+          text-anchor: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+  
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+          }
+        }
+      </style>
+      <link rel="stylesheet" href="/static/css/pricing.css"/>
+
+</head>
+<body>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto font-weight-normal">KIDSCCTV</h5>
+        <nav class="my-2 my-md-0 mr-md-3">
+          <a class="p-2 text-dark" href="#">LOGOUT</a>
+          <a class="p-2 text-dark" href="#">MYPAGE</a>
+          <a class="p-2 text-dark" href="#">CATEGORY</a>
+        </nav>
+        <a class="btn btn-outline-primary" href="#">HOME</a>
+      </div>
+    
+      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-7">경상도</h1>
+        <p class="lead">경상도 어린이 보호구역 CCTV 관련 자료</p>
+      </div>
+      <div class="container">
+        <div class="card-deck mb-3 text-center">
+          <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+              <h4 class="my-0 font-weight-normal">구 별 차트</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>10 users included</li>
+                <li>2 GB of storage</li>
+                <li>Email support</li>
+                <li>Help center access</li>
+              </ul>
+                <button onclick="location.href='/cctv/chart/seoul'" class="btn btn-outline-primary" type="submit">강남구</button>
+                <button onclick="location.href='/cctv/chart/chung'" class="btn btn-outline-primary" type="submit">송파구</button>
+                <button onclick="location.href='/cctv/chart/kyeong'" class="btn btn-outline-primary" type="submit">용산구</button>
+                <button onclick="location.href='/cctv/chart/jeolla'" class="btn btn-outline-primary" type="submit">성동구</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
