@@ -7,29 +7,31 @@ class cctv_data(models.Model):
     objects = models.Manager()
 
     no          = models.AutoField(primary_key=True)
-    big_addr    = models.CharField(max_length=30)
-    small_addr  = models.CharField(max_length=30)
-    cctv_yn     = models.CharField(max_length=5)
-    cctv_num    = models.IntegerField()
+    big_addr    = models.CharField(max_length=30, null=True)
+    small_addr  = models.CharField(max_length=30, null=True)
+    sisul       = models.CharField(max_length=30, null=True)
+    cctv_yn     = models.CharField(max_length=5, null=True)
+    cctv_num    = models.IntegerField(null=True)
 
 class user_table(models.Model):
     objects = models.Manager()
 
     user_id     = models.CharField(max_length=30, primary_key=True)
-    name        = models.CharField(max_length=20)
-    password    = models.CharField(max_length=30)
-    age         = models.IntegerField()
-    home        = models.CharField(max_length=70)
+    name        = models.CharField(max_length=20, null=True)
+    password    = models.CharField(max_length=30, null=True)
+    age         = models.IntegerField(null=True)
+    home        = models.CharField(max_length=70, null=True)
 
 class article(models.Model):
     objects = models.Manager()
 
     no          = models.AutoField(primary_key=True)
-    title       = models.CharField(max_length=70)
+    title       = models.CharField(max_length=70, null=True)
     thumbnail   = models.BinaryField(null=True)
-    report      = models.CharField(max_length=20)
-    content     = models.TextField()
-    pub_date     = models.DateField()
+    report      = models.CharField(max_length=20, null=True)
+    link        = models.CharField(max_length=100, null=True)
+    content     = models.TextField(null=True)
+    pub_date    = models.DateField(null=True)
 
 class favorite(models.Model):
     objects = models.Manager()
@@ -45,3 +47,4 @@ class article_scrap(models.Model):
     user_id     = models.ForeignKey(user_table, on_delete = models.CASCADE)
     article_no   = models.ForeignKey(article, on_delete = models.CASCADE)
     scrap_date  = models.DateField()
+    

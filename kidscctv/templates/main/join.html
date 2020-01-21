@@ -1,0 +1,15 @@
+{% include "./header.html" %}
+<body>
+    <h1>{{error}}</h1>
+    <form action="/cctv/main/join" method="post">
+        {% csrf_token %}
+        아이디 : <input type="text" name="user_id" /><br />
+        이름 : <input type="text" name="name" /><br />
+        암호 : <input type="password" name="password" /><br />
+        암호1 : <input type = "password" name ="password1" /><br />
+        나이 : <input type="number" name="age" /><br />
+        주소 : <input type="text" name="home" /><br />
+        <input type="submit" value="회원가입" />
+    </form>
+</body>
+</html>
