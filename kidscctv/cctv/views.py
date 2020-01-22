@@ -379,17 +379,71 @@ def chart_small(request):
         img_url2 = base64.b64encode(img.getvalue()).decode()
 
         plt.close()
-
+        
+        # small_addr이랑 user_id가 favorite에 있는지 확인
+        # bool값으로 전달 (1, 0)
+        
+        # SELECT NO FROM CCTV_CCTV_DATA  WHERE big_addr='전라남도' and small_addr='고흥군' and rownum <=1
+        row2 = cctv_data.objects.filter(big_addr=big, small_addr=small).values('no')
+        check_no = row2[0]['no']
+        # SELECT * FROM CCTV_FAVORITE WHERE REGION_NO_ID= check_no and USER_ID_ID=request.session['user_id']
+        check_fav = ""
+        try:
+            check_fav = favorite.objects.filter(region_no=check_no, user_id=request.session['user_id'])
+            if check_fav:
+                check_fav = True
+            else:
+                check_fav = False
+        except:
+            pass
 
 
     return render(request, 'chart/small.html', \
         {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1),\
-         "graph3":'data:;base64,{}'.format(img_url2)})
+         "graph3":'data:;base64,{}'.format(img_url2), "big":big, "small":small, "check_fav": check_fav})
 
-def chart_circleplt(request):
+def chart_favorite(request):
+    big = request.GET.get("big", "") 
+    small = request.GET.get("small", "")
+
+    # SELECT * FROM CCTV_USER_TABLE WHERE user_id=request.session['user_id']
+    row1 = user_table.objects.get(user_id=request.session['user_id'])
+    print(row1)
+    fav_usr = row1
+
+    # GET 1개 -= 객체
+    #     여러개 - 에러 안뱉음
+
+    # filter 1개 = 그 데이터
+    #        여러개 = 객체의 리스트
 
 
-    pass
+    # SELECT NO FROM CCTV_CCTV_DATA  WHERE big_addr='전라남도' and small_addr='고흥군' and rownum <=1
+    row2 = cctv_data.objects.filter(big_addr=big, small_addr=small)
+    fav_reg = row2[0]
+    print(fav_usr)
+    # print(fav_reg)
+
+    print(type(request.session['user_id']))
+    obj = favorite()
+    obj.region_no = fav_reg
+    obj.user_id = fav_usr
+    obj.save()  
+    # INSERT INTO CCTV_FAVORITE(REGION_NO_ID, USER_ID_ID) VALUES ( fav_reg , request.session['user_id'] )
+
+    return redirect("/cctv/chart/small?big="+ big + "&small=" + small)
+
+def chart_unfavorite(request):
+    big = request.GET.get("big", "") 
+    small = request.GET.get("small", "")
+
+    # SELECT NO FROM CCTV_CCTV_DATA  WHERE big_addr='전라남도' and small_addr='고흥군' and rownum <=1
+    row2 = cctv_data.objects.filter(big_addr=big, small_addr=small).values('no')
+    check_no = row2[0]['no']
+
+    # DELETE FROM CCTV_FAVORITE WHERE REGION_NO_ID= check_no and USER_ID_ID=request.session['user_id']
+    favorite.objects.get(region_no=check_no, user_id=request.session['user_id']).delete()
+    return redirect("/cctv/chart/small?big="+ big + "&small=" + small)
 
 
 def chart_barplt(request):
@@ -593,6 +647,33 @@ def article_main(request):
         cnt = article.objects.all().count()
         total = (cnt-1)//6+1    
 
-        return render(request,'article/main.html',{"list":list1, "pages":range(1,total+1,1)})
+        # 스크랩 했는지 확인
+        # SELECT * FROM ARTICLE_SCRAP WHERE user_id=로그인한 아이디 and art_no=해당 기사 기본키
+
+
+        return render(request,'article/main.html',{"list":list1, "pages":range(1,total+1,1), "page": page} )
 
      
+def article_scrap1(request):
+    no = request.GET.get("no", "") 
+    page = request.GET.get("page", "") 
+
+    # SELECT * FROM CCTV_USER_TABLE WHERE user_id=request.session['user_id']
+
+    row1 = user_table.objects.get(user_id=request.session['user_id'])
+    print(row1)
+    scr_usr = row1
+
+    # SELECT * FROM CCTV_ARTICLE WHERE no=no
+    row2 = article.objects.get(no=no)
+    print(row2)
+    scr_art = row2
+
+    obj = article_scrap()
+    # obj.scrap_date = "SYSDATE" # YYYY-MM-DD
+    obj.scrap_date = "2020-01-01" # YYYY-MM-DD
+    obj.article_no = scr_art 
+    obj.user_id = scr_usr
+    obj.save()  
+
+    return redirect("/cctv/article/main?page="+page)

@@ -49,6 +49,17 @@
         <h1 class="display-7">도 별 어린이 보호구역 정보</h1>
         <p class="lead">도 별로 어린이 보호구역에 관련된 차트와 정보를 볼 수 있습니다</p>
       </div>
+      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" style="border:2px solid #F0F;">
+        {% if request.session.user_id %}
+          {% if not check_fav %}
+          <button onclick="location.href='/cctv/chart/favorite?big={{big}}&small={{small}}'" type="button" class="btn btn-success">favorite</button>
+          {% else %}
+          <button onclick="location.href='/cctv/chart/unfavorite?big={{big}}&small={{small}}'" type="button" class="btn btn-danger">Unfavorite</button>
+          {% endif %}
+        {% else %}
+          <button onclick="location.href='/cctv/chart/unfavorite?big={{big}}&small={{small}}'" type="button" class="btn btn-danger" hidden>Unfavorite</button>
+        {% endif %}
+      </div>
       <div class="box1">
         <img src="{{graph1}}" />
         <img src="{{graph2}}" />
