@@ -239,52 +239,157 @@ def chart_big(request):
 
 
         return render(request, 'chart/big.html',\
-             {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), "small_list":tmp_list_tuple})
+             {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), "small_list":tmp_list_tuple, "big": big})
 
 def chart_small(request):
-    pass
+    font_name = font_manager.FontProperties\
+    (fname='C:/Windows/Fonts/gulim.ttc').get_name() # 폰트읽기
+    rc('font', family=font_name) # 폰트적용
+    plt.rcParams['figure.figsize']= (12, 4)
+
+
+    if request.method == 'GET':
+
+        big = request.GET.get("big", "부산광역시") 
+        small = request.GET.get("small", "기장군")
+
+        test4 = list()
+        test5 = list()
+
+        tmp_addr = cctv_data.objects.filter(big_addr=big ,small_addr=small).values("cctv_yn")
+        # print(tmp_addr)
+        
+
+        tmp = []
+
+        for i in tmp_addr:
+            tmp.append(str(i['cctv_yn']))
+            # print(tmp)
+
+        tot1 = len(tmp)
+        y_num1 = tmp.count("Y")
+        y_percent1 = round((y_num1 / tot1) * 100,2)
+        test4.append(y_percent1)
+    
+        print(test4)
+
+        tot2 = len(tmp)
+        n_num1 = tmp.count("N")
+        n_percent1 = round((n_num1 / tot2) * 100,2)
+        test5.append(n_percent1)
+    
+        print(test5)
+
+
+        group_names = ['Y', 'N']
+        group_sizes = [test4, test5]
+        group_colors = ['lightskyblue', 'lightcoral']
+        group_explodes = (0, 0) # explode 1st slice
+        
+        plt.pie(group_sizes,
+            explode=group_explodes,
+            labels=group_names, 
+            colors=group_colors, 
+            autopct='%1.2f%%', # second decimal place
+            shadow=False, 
+            startangle=90,
+            textprops={'fontsize': 14}) # text font size
+        plt.axis('equal')
+        plt.title("< 시군구별 여부 >", fontsize=20)
+
+        plt.draw()
+        img = io.BytesIO() # img에 byte배열로 보관
+        plt.savefig(img, format="png") # png파일 포맷으로 저장
+        img_url = base64.b64encode(img.getvalue()).decode()
+        plt.close() # 그래프 종료
+
+        # ###########################################################
+
+        test6 = list()
+        test7 = list()
+
+        tmp_addr = cctv_data.objects.filter(big_addr=big ,small_addr=small).values("cctv_num")
+        # print(tmp_addr)
+
+        for i in tmp_addr:
+            test6.append(str(i['cctv_num']))
+        # print(test6)
+
+        tmp_set = set()
+        for tmp in test6:
+            tmp_set.add(tmp)
+        # print(tmp_set)
+
+        tmp_list1 = list(tmp_set)
+        for i in range(len(tmp_list1)):
+            tmp_list1[i] = int(tmp_list1[i])
+        tmp_list1.sort()
+        
+        for i in range(len(tmp_list1)):
+            tmp_list1[i] = str(tmp_list1[i])
+    
+
+        for i in tmp_list1:
+            num = test6.count(i)
+            test7.append(num)
+        print(test7)
+
+        plt.title("< 시군구별 대수 비교 >")
+        plt.xlabel("< 시군구 >")
+        plt.ylabel("< 대수 >")
+
+        plt.bar(tmp_list1,test7,width=0.25, bottom=0.25, align='center',label='A', color='g', edgecolor='gray',linewidth=0.5 )
+
+
+        plt.draw()
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img_url1 = base64.b64encode(img.getvalue()).decode()
+
+        plt.close()
+
+        #   ##################################################
+        test8 = list()
+        test9 = list()
+
+        tmp_addr = cctv_data.objects.filter(big_addr=big ,small_addr=small).values("sisul")
+
+        for i in tmp_addr:
+            test8.append(str(i['sisul']))
+
+        tmp_set = set()
+        for tmp in test8:
+            tmp_set.add(tmp)
+
+        tmp_list = list(tmp_set)
+        tmp_list.sort()
+        for i in tmp_list:
+            num = test8.count(i)
+            test9.append(num)
+
+        plt.title("< 시군구 시설갯수 >")
+        plt.xlabel("< 시설 >")
+        plt.ylabel("< 갯수 >")
+
+        plt.bar(tmp_list,test9,width=0.25, bottom=0.25, align='center',label='A', color='g', edgecolor='gray',linewidth=0.5 )
+
+        plt.draw()
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img_url2 = base64.b64encode(img.getvalue()).decode()
+
+        plt.close()
+
+
+
+    return render(request, 'chart/small.html', \
+        {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1),\
+         "graph3":'data:;base64,{}'.format(img_url2)})
 
 def chart_circleplt(request):
-    rows_tmp = cctv_data.objects.filter(big_addr="강원도").values("cctv_yn")
-    tmp = list()
-    for i in rows_tmp:
-        tmp.append(i['cctv_yn'])
-    tmp.sort()
-    print(tmp)
-    total = len(tmp)
-    Y_num = 0; N_num = 0
-    for i in tmp:
-        if i =="Y":
-            Y_num += 1
-        elif i == "N":
-            N_num += 1
-    print(total)
-    print(Y_num)
-    print(N_num)
-    
-    group_names = ['Y_group', 'N_group']
-    group_sizes = [Y_num, N_num]
-    group_colors = ['lightskyblue', 'lightcoral']
-    group_explodes = (0, 0) # explode 1st slice
-    
-    plt.pie(group_sizes,
-        explode=group_explodes,
-        labels=group_names, 
-        colors=group_colors, 
-        autopct='%1.2f%%', # second decimal place
-        shadow=False, 
-        startangle=90,
-        textprops={'fontsize': 14}) # text font size
-    plt.axis('equal')
-    plt.title("Pie graph test", fontsize=20)
 
-    plt.draw()
-    img = io.BytesIO() # img에 byte배열로 보관
-    plt.savefig(img, format="png") # png파일 포맷으로 저장
-    img_url = base64.b64encode(img.getvalue()).decode()
-    plt.close() # 그래프 종료
 
-    return render(request, "chart/circleplt.html",{"graph1":'data:;base64,{}'.format(img_url)})
+    pass
 
 
 def chart_barplt(request):

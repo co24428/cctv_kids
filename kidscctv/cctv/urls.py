@@ -11,6 +11,7 @@ urlpatterns = [
     path('chart/circleplt', views.chart_circleplt, name="chart/circleplt"),
     path('chart/total', views.chart_total, name="chart/total"),
     path('chart/big', views.chart_big, name="chart/big"),
+    path('chart/small', views.chart_small, name="chart/small"),
 
     # 메인
     path('main/index', views.main_index, name= "index"),
