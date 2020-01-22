@@ -1,0 +1,18 @@
+<body>
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+      <h5 class="my-0 mr-md-auto font-weight-normal"><a class="btn btn-outline-primary" href="/cctv/main/index">KIDS CCTV</a></h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+      
+      {% if not request.session.user_id %}
+          <a href="/cctv/main/login">로그인</a>
+          <a href="/cctv/main/join">회원가입</a>
+      {% else %}
+          <form action="search">
+              <font size="2em" color="green">{{request.session.user_id}}님이 로그인했습니다.</font>
+              <input autocomplete="off" name="value" type="text" placeholder="검색어를 입력하세요.">
+              <a href="/cctv/main/mypage">마이페이지</a>
+              <a href="/cctv/main/logout">로그아웃</a>
+          </form>
+      {% endif %}
+      </nav>
+      </div>

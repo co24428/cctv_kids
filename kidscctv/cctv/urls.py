@@ -19,7 +19,9 @@ urlpatterns = [
     path('main/login', views.main_login, name = "login"),
     path('main/join', views.main_join, name = "join"),
     path('main/logout', views.main_logout, name = "logout"),
-    path('main/mypage', views.main_mypage, name = "main_mypage"),
+    path('main/mypage', views.main_mypage, name = "main/mypage"),
+    path('main/myfav', views.main_myfav, name = "main/myfav"),
+    path('main/myscrap', views.main_myscrap, name = "main/myscrap"),
 
     # 기사
     path('article/main',views.article_main, name="article/main"),

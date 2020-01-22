@@ -677,3 +677,60 @@ def article_scrap1(request):
     obj.save()  
 
     return redirect("/cctv/article/main?page="+page)
+
+
+def main_myfav(request):
+
+    # SELECT region_no FROM favorite where user_id= sessrion id
+    rows = favorite.objects.filter(user_id=request.session['user_id']).values("region_no")
+    
+    list_tmp = list()
+    for i in rows:
+        list_tmp.append(i['region_no'])
+
+    # SELECT big_addr, small_addr FROM cctv_data WHERE no in(list_tmp)
+    big_list = list()
+    small_list = list()
+    for i in list_tmp:
+        # SELECT big_addr, small_addr FROM cctv_data WHERE no=i
+        big_list.append  ( cctv_data.objects.filter(no=i).values("big_addr")[0]["big_addr"] )
+        small_list.append( cctv_data.objects.filter(no=i).values("small_addr")[0]["small_addr"] )
+
+    addr_list = list()
+    for i in range(len(big_list)):
+        addr = big_list[i] + " " + small_list[i]
+        addr_list.append(addr)
+    
+    final_list = list()
+    for i in range(len(addr_list) ):
+        dic1 = dict()
+        dic1["big"] = big_list[i]
+        dic1["small"] = small_list[i]
+        dic1["addr"] = addr_list[i]
+        final_list.append(dic1)
+    
+    return render(request,'main/myfav.html',{"final":final_list})
+
+
+def main_myscrap(request):
+    # SELECT region_no FROM favorite where user_id= sessrion id
+    rows = article_scrap.objects.filter(user_id=request.session['user_id']).values("article_no")
+
+    list_tmp = list()
+    for i in rows:
+        list_tmp.append(i['article_no'])
+
+    title_list = list()
+    link_list = list()
+    for i in list_tmp:
+        title_list.append( article.objects.filter(no=i).values("title")[0]["title"] )
+        link_list.append( article.objects.filter(no=i).values("link")[0]["link"] )
+    
+    final_list = list()
+    for i in range(len(link_list) ):
+        dic1 = dict()
+        dic1["title"] = title_list[i]
+        dic1["link"] = link_list[i]
+        final_list.append(dic1)
+    
+    return render(request,'main/myscrap.html',{"final":final_list})

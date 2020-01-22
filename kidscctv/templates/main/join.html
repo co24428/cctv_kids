@@ -1,4 +1,4 @@
-{% include "./header.html" %}
+{% include "../header.html" %}
 <style type="text/css">
 	.vi{
 		border-radius: 5px;
@@ -21,11 +21,11 @@
       color: black;
     }
 </style>
-<body>  
+{% include "../navbar.html" %}
     <h1>{{error}}</h1>
     <form action="/cctv/main/join" method="post">
         {% csrf_token %}
-        <div id="" class="margin-center vi">
+        <div id="" class="margin-center vi" style="margin-top: 100px;">
         <div class="jb-black" class="centered">CCTV 어린이 보호구역</div>
             <legend class="jb-black" class="screen_out">회원가입 정보 입력</legend>
             <div class="box_join">

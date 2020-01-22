@@ -9,6 +9,7 @@
 {% include "../navbar.html" %}
     <img src ="http://www.mindforest.kr/resources/Sailor/img/slides/flexslider/2.jpg">
 
-    <button type = "button" style= "width: 250pt; height:50pt; " name = "btn1" ><a href="/cctv/chart/total">chart</a></button>
-    <button type = "button" style= "width: 250pt; height:50pt; " name = "btn1" ><a href="/cctv/article/main">article</a></button>
+    {% for i in final %}
+    <button type = "button" style= "width: 250pt; height:50pt; "><a href="/cctv/chart/small?big={{i.big}}&small={{i.small}}">{{i.addr}}</a></button>
+    {% endfor %}
 </body>
