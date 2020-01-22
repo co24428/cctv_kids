@@ -25,6 +25,10 @@
           float:left; width:900px; height:800px; background-color:#234234;}
         .box2 {
           display:inline-block; width:300px; height:700px; margin-left:550px; margin-top: 35px;}
+        .box3 {
+          float:left; width:120px; height:50px;}
+        .box4 {
+          display:inline-block; width:120px; height:40px;}
 
       </style>
       <link rel="stylesheet" href="/static/css/pricing.css"/>
@@ -41,7 +45,7 @@
         <a class="btn btn-outline-primary" href="#">HOME</a>
       </div>
     
-      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" style="border:2px solid #F0F;">
         <h1 class="display-7">도 별 어린이 보호구역 정보</h1>
         <p class="lead">도 별로 어린이 보호구역에 관련된 차트와 정보를 볼 수 있습니다</p>
       </div>
@@ -50,30 +54,18 @@
         <img src="{{graph2}}" />
       </div>
       <div class="box2">
-        {% for one in big_list %}
+        {% for one in small_list %}
         <!-- <button onclick="location.href='/cctv/chart/seoul'" class="btn btn-outline-primary">{{one}}</button> <br/> -->
-        <button onclick="location.href='/cctv/chart/big?big={{one}}'" type="button" class="btn btn-success">{{one}}</button> <br/>
+        <div class="box3">
+          <button onclick="location.href='/cctv/chart/big?big={{one.0}}'" type="button" class="btn btn-success">{{one.0}}</button>
+        </div>
+        <div class="box4">
+          {% if one.1 %}
+            <button onclick="location.href='/cctv/chart/big?big={{one.1}}'" type="button" class="btn btn-success">{{one.1}}</button>
+          {% endif %}
+        </div>
         <div style="margin-top: 12px;"></div>
         {% endfor %}
       </div>
-
-
-      <!-- <div class="container">
-        <div class="card-deck mb-3 text-center">
-          <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-              <h4 class="my-0 font-weight-normal">도 별 차트</h4>
-            </div>
-            <div class="card-body">
-                <div>
-                </div>
-                <button onclick="location.href='/cctv/chart/seoul'" class="btn btn-outline-primary" type="submit">서울광역시/경기도</button>
-                <button onclick="location.href='/cctv/chart/chung'" class="btn btn-outline-primary" type="submit">충청도/강원도</button>
-                <button onclick="location.href='/cctv/chart/kyeong'" class="btn btn-outline-primary" type="submit">경상도</button>
-                <button onclick="location.href='/cctv/chart/jeolla'" class="btn btn-outline-primary" type="submit">전라도</button>
-            </div>
-          </div>
-        </div>
-      </div> -->
 </body>
 </html>

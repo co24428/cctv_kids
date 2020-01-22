@@ -125,6 +125,125 @@ def chart_total(request):
         {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), \
           "big_list":big_list  })
 
+def chart_big(request):
+
+    font_name = font_manager.FontProperties\
+        (fname='C:/Windows/Fonts/gulim.ttc').get_name() # 폰트읽기
+    rc('font', family=font_name) # 폰트적용
+    plt.rcParams['figure.figsize']= (14, 4)
+
+
+    if request.method == 'GET':
+
+        big = request.GET.get("big", "경상남도")
+
+        if big == "경기도":
+            plt.rcParams['figure.figsize']= (15, 4)
+
+
+        test3 = list()
+        addr_list = cctv_data.objects.filter(big_addr=big).values("small_addr")
+        
+
+        tmp_set = set()
+        for tmp in addr_list:
+            if tmp['small_addr'] != "시흥로":
+                tmp_set.add(tmp['small_addr'])
+                # tmp['small_addr'][:len(tmp['small_addr'])-1]
+            else:
+                continue
+
+        tmp_list = list(tmp_set)
+        tmp_list.sort()
+
+        tmp_min_list = list()
+        for i in tmp_list:
+            tmp_min_list.append(i[:len(i)-1])
+        
+        tmp_list_tuple = list()
+        for i in range(0,len(tmp_list),2):
+            try:
+                tmp_tuple = (tmp_list[i], tmp_list[i+1])
+                tmp_list_tuple.append(tmp_tuple)
+            except:
+                tmp_tuple = (tmp_list[i],)
+                tmp_list_tuple.append(tmp_tuple)
+
+        # tmp_min_list_tuple = list()
+        # for i in range(0,len(tmp_min_list),2):
+        #     if tmp_min_list[i+1]:
+        #         tmp_min_tuple = tuple(tmp_min_list[i], tmp_min_list[i+1])
+        #         tmp_min_list_tuple.append(tmp_min_tuple)
+        #     else:
+        #         tmp_min_tuple = tuple(tmp_min_list[i])
+        #         tmp_min_list_tuple.append(tmp_min_tuple)
+
+        
+
+
+        for tmp_addr in tmp_list:
+            row2 = cctv_data.objects.filter(big_addr=big , small_addr=tmp_addr).values("cctv_yn")
+            
+            list1 = list()
+            for i in row2:
+                list1.append(i['cctv_yn'])
+
+            tot = len(list1)
+            y_num = list1.count("Y")
+            y_percent = round((y_num / tot) * 100,2)
+            test3.append(y_percent)
+
+        plt.title("< CCTV 설치여부 >")
+        plt.xlabel("X축")
+        plt.ylabel("Y축")
+        if big =="경기도":
+            plt.bar(tmp_min_list,test3)
+        else:
+            plt.bar(tmp_list,test3)
+
+        plt.draw()
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img_url = base64.b64encode(img.getvalue()).decode()
+
+        plt.close()
+
+        # ##############
+        test2 = list()
+
+        for tmp_addr2 in tmp_list:
+            row1 = cctv_data.objects.filter(big_addr=big , small_addr=tmp_addr2).aggregate(Avg("cctv_num"))
+
+            test2.append(row1['cctv_num__avg'])
+            
+        print(test2)
+
+        
+        plt.title("CCTV 설치대수")
+        plt.xlabel("X축")
+        plt.ylabel("Y축")
+        
+        if big =="경기도":
+            plt.bar(tmp_min_list,test2)
+        else:
+            plt.bar(tmp_list,test2)
+
+        plt.draw()
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img_url1 = base64.b64encode(img.getvalue()).decode()
+
+        plt.close()
+    
+  
+
+
+        return render(request, 'chart/big.html',\
+             {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), "small_list":tmp_list_tuple})
+
+def chart_small(request):
+    pass
+
 def chart_circleplt(request):
     rows_tmp = cctv_data.objects.filter(big_addr="강원도").values("cctv_yn")
     tmp = list()
@@ -166,9 +285,6 @@ def chart_circleplt(request):
     plt.close() # 그래프 종료
 
     return render(request, "chart/circleplt.html",{"graph1":'data:;base64,{}'.format(img_url)})
-
-def chart_big(request):
-    pass
 
 
 def chart_barplt(request):
@@ -366,56 +482,12 @@ def main_mypage(request):
 # 기사 - 지윤
 
 def article_main(request):
-    if request.method == 'GET' :
-        rows = article.objects.all()
+    if request.method == 'GET':
+        page = int(request.GET.get("page",1))    
+        list1 = article.objects.all()[page*6-6:page*6]
+        cnt = article.objects.all().count()
+        total = (cnt-1)//6+1    
 
-        return render(request,'article/main.html',{"list":rows})
-        # return render(request,'article_main.html',{"list":rows, 'img': "/static/image/art_thumbnail/['newsis' + str(i) + '.png']", "cnt":range(60)})
+        return render(request,'article/main.html',{"list":list1, "pages":range(1,total+1,1)})
+
      
-
-# 차트 - 아인
-
-
-# print(big_addr_list())
-#     print(small_addr_list("경상남도"))
-
-#     rows_tmp = cctv_data.objects.filter(big_addr="강원도").values("cctv_yn")
-#     tmp = list()
-#     for i in rows_tmp:
-#         tmp.append(i['cctv_yn'])
-#     tmp.sort()
-#     print(tmp)
-#     total = len(tmp)
-#     Y_num = 0; N_num = 0
-#     for i in tmp:
-#         if i =="Y":
-#             Y_num += 1
-#         elif i == "N":
-#             N_num += 1
-#     print(total)
-#     print(Y_num)
-#     print(N_num)
-    
-#     group_names = ['Y_group', 'N_group']
-#     group_sizes = [Y_num, N_num]
-#     group_colors = ['lightskyblue', 'lightcoral']
-#     group_explodes = (0, 0) # explode 1st slice
-    
-#     plt.pie(group_sizes,
-#         explode=group_explodes,
-#         labels=group_names, 
-#         colors=group_colors, 
-#         autopct='%1.2f%%', # second decimal place
-#         shadow=False, 
-#         startangle=90,
-#         textprops={'fontsize': 14}) # text font size
-#     plt.axis('equal')
-#     plt.title("Pie graph test", fontsize=20)
-
-#     plt.draw()
-#     img = io.BytesIO() # img에 byte배열로 보관
-#     plt.savefig(img, format="png") # png파일 포맷으로 저장
-#     img_url = base64.b64encode(img.getvalue()).decode()
-#     plt.close() # 그래프 종료
-
-#     return render(request, "chart/total.html",{"graph1":'data:;base64,{}'.format(img_url)})

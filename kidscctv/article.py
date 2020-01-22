@@ -2,6 +2,7 @@ from selenium import webdriver
 import urllib. request
 import time
 import cx_Oracle as oci
+from base64 import b64encode # byte배열을 base64로 변경함.
 
 conn = oci.connect('admin_mpj/1234@192.168.99.100:32764/xe', encoding="UTF-8", nencoding="UTF-8")
 cursor = conn.cursor()
@@ -32,6 +33,7 @@ content = list()
 reporter = list()
 date = list()
 
+count = 1
 for url in url_list:
     driver.get(url)
 
@@ -50,101 +52,61 @@ for url in url_list:
         date.append(reporter_date[1].strip())
 
 
-# print("="*50)
-# print("title")
-# print("="*50)
-# for i in title:
-#     print(i)
-
-# print("="*50)
-# print("reporter")
-# print("="*50)
-# for i in reporter:
-#     print(i)
-
-# print("="*50)
-# print("date") # YYYY.MM.DD HH:MI
-# print("="*50)
-# for i in date:
-#     print(i)
-
-# print("="*50)
-# print("content")
-# print("="*50)
-# for i in content:
-#     print(i)
-
-# print("="*50)
-# print("link")
-# print("="*50)
-# for i in link:
-#     print(i)
-
-
-# pdf = open('hello.pdf', 'rb')
-# mem_file = io.BytesIO(pdf.read())
-
-
 thumbnail = list()
-for i in range(0,60):
-    path = "static/img/art_thumnail/"
+file = open("C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/default.png", "rb")
+img = file.read()
+img64 = b64encode(img).decode("utf-8")
+thumbnail.append("data:;base64,{}".format(img64))
+for i in range(0,59):
+    path = "C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/art_thumnail/"
     full_path = path + 'newsis' + str(i) + '.png'
-    # print(full_path)
     try:
         file = open(full_path, 'rb')
         img = file.read()
-        print(len(img))
-        thumbnail.append(img)
+        img64 = b64encode(img).decode("utf-8")
+        
     except:
-        thumbnail.append(None)
-
-# print("="*50)
-# print("thumbnail")
-# print("="*50)
-# for i in thumbnail:
-#     print(i)
+        file = open("C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/default.png", "rb")
+        img = file.read()
+        img64 = b64encode(img).decode("utf-8")
+        
+    thumbnail.append("data:;base64,{}".format(img64))
 
 
 for i in range(0,60):
-    # sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK, THUMBNAIL) VALUES('" \
-    #     + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
-    #     + reporter[i] + "', '" + content[i] + "', '" + link[i] + "', :0 )"
-#    
     print("===================================================")
-    if thumbnail[i]:
-        sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK, THUMBNAIL) VALUES('" \
-        + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
-        + reporter[i] + "', '" + content[i] + "', '" + link[i] + "', :0 )"
-        print(sql)
+    sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK, THUMBNAIL_I) VALUES('" \
+    + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
+    + reporter[i] + "', '" + content[i] + "', '" + link[i] + "', :0 )"
+    print(sql)
 
-        cursor.execute(sql, [thumbnail[i]])
-    else:
-        sql = "INSERT INTO CCTV_ARTICLE(TITLE, PUB_DATE, REPORT, CONTENT, LINK) VALUES('" \
-        + title[i] +"', TO_DATE('" + date[i] + "', 'YYYY.MM.DD HH24:MI'), '" \
-        + reporter[i] + "', '" + content[i] + "', '" + link[i] + "')"
-        print(sql)
+    cursor.execute(sql, [thumbnail[i]])
 
-        cursor.execute(sql)
-#
 
 conn.commit()
 
 
 # 이미지가 필요할 때
-# idx = 40
-# for i in link:
-#     driver.get(i)
-#     time.sleep(1)
-#     tmp = driver.find_element_by_xpath('//*[@id="textBody"]')
-#     img_table = tmp.find_element_by_tag_name('table')
-#     try:
-#         file = img_table.find_element_by_tag_name('img').get_attribute("src")
-#         # path부분 각자 경로 맞게 변경
-#         path = "C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/art_thumnail/"
-#         file_name = "newsis" + str(idx) + ".png"
-#         urllib.request.urlretrieve(file, path + file_name)
-#         print("image save!!")
-#         idx += 1
-#     except Exception as e:
-#         idx += 1
-#         continue
+    # if count == 1:
+    #     idx = 0
+    # elif count == 2:
+    #     idx = 20
+    # elif count == 3:
+    #     idx = 40
+    # for i in link:
+    #     driver.get(i)
+    #     time.sleep(1)
+    #     tmp = driver.find_element_by_xpath('//*[@id="textBody"]')
+    #     img_table = tmp.find_element_by_tag_name('table')
+    #     try:
+    #         file = img_table.find_element_by_tag_name('img').get_attribute("src")
+    #         # path부분 각자 경로 맞게 변경
+    #         path = "C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/art_thumnail/"
+    #         file_name = "newsis" + str(idx) + ".png"
+    #         urllib.request.urlretrieve(file, path + file_name)
+    #         print("image save!!")
+    #         idx += 1
+    #     except Exception as e:
+    #         idx += 1
+    #         continue
+    # count += 1

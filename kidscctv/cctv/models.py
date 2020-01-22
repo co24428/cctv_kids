@@ -28,6 +28,7 @@ class article(models.Model):
     no          = models.AutoField(primary_key=True)
     title       = models.CharField(max_length=70, null=True)
     thumbnail   = models.BinaryField(null=True)
+    thumbnail_i   = models.TextField(null=True)
     report      = models.CharField(max_length=20, null=True)
     link        = models.CharField(max_length=100, null=True)
     content     = models.TextField(null=True)
