@@ -1,23 +1,27 @@
 {% include "../header.html" %}
 {% include "../navbar.html" %}
-    
-      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" style="border:2px solid #F0F;">
-        <h1 class="display-7">도 별 어린이 보호구역 정보</h1>
-        <p class="lead">도 별로 어린이 보호구역에 관련된 차트와 정보를 볼 수 있습니다</p>
-      </div>
+<div style="position: relative;">
+
+  <img src ={{image}} width="1250" height="500" style="margin-left: auto; margin-right: auto; display: block;"></img>
+  <div style= "left: 1250px; width: 450px; height: 300px; top: 40px; bottom: 365px; font-size: 1.8em; font-weight: bold; position: absolute; color: white;">
+    {{big}} {{small}}
+    <h3></h3>
+    어린이 보호구역 정보
+  </div>
       <div class="box1">
-        <img src="{{graph1}}" />
-        <img src="{{graph2}}" />
+        <hr style="margin-left: 13%; width: 1250px;"></hr>
+        <img src="{{graph1}}" style="width:100% ;margin-left: 0%; margin-right: auto; margin-bottom: 100px; margin-top: 100px; display: outside;"/>
+        <hr style="margin-left: 13%; width: 1250px;"></hr>
+        <img src="{{graph2}}" style="width:100% ;margin-left: 0%; margin-right: auto; margin-bottom: 100px; margin-top: 100px; display: outside;"/>
       </div>
       <div class="box2">
         {% for one in small_list %}
-        <!-- <button onclick="location.href='/cctv/chart/seoul'" class="btn btn-outline-primary">{{one}}</button> <br/> -->
         <div class="box3">
-          <button onclick="location.href='/cctv/chart/small?big={{big}}&small={{one.0}}'" type="button" class="btn btn-success">{{one.0}}</button>
+          <button onclick="location.href='/cctv/chart/small?big={{big}}&small={{one.0}}'" type="button" class="btn btn-warning">{{one.0}}</button>
         </div>
         <div class="box4">
           {% if one.1 %}
-            <button onclick="location.href='/cctv/chart/small?big={{big}}&small={{one.1}}'" type="button" class="btn btn-success">{{one.1}}</button>
+            <button onclick="location.href='/cctv/chart/small?big={{big}}&small={{one.1}}'" type="button" class="btn btn-warning">{{one.1}}</button>
           {% endif %}
         </div>
         <div style="margin-top: 12px;"></div>

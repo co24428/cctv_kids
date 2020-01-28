@@ -1,0 +1,59 @@
+{% include "../header.html" %}
+<style type="text/css">
+	.vi{
+		border-radius: 5px;
+		background-color: #FFD232;
+		border-style: solid;
+	    border-color: #FFD232;
+	    border-width: 2px;
+	    color: #FFFFFF;
+		margin-bottom: 5px;
+		padding:15px;
+		width:400px
+	}
+	.align-center { text-align: center; }
+	.align-justify { text-align: justify; }
+	.margin-center { 
+		margin-left:auto;
+		margin-right:auto;
+	}
+    .jb-black {
+      color: black;
+    }
+</style>
+    {% include "../navbar.html" %}
+    <h1> <p style="margin:20px 30px 20px;">{{error}}</p></h1>
+    <form action="/cctv/main/idfind" method="post">
+        {% csrf_token %}
+        <div id="" class="margin-center vi" style="margin-top: 70px;">
+        <div class="jb-black" class="centered">CCTV 어린이 보호구역</div>
+        <div class="inner_login">
+            <div class="login_tistory">
+                <!-- <form method="post" id="authForm" action="https://www.tistory.com/auth/login"> -->
+                    <input type="hidden" name="redirectUrl" value="https://blogpack.tistory.com/manage">
+                    <!-- <fieldset> -->
+                    <legend class="jb-black" class="screen_out">아이디 찾기</legend>
+                    <img src="https://revlightsecurity.com/wp-content/uploads/2018/09/home_product_04.png" alt="..." class="img-rounded">
+                    <div class="box_login">
+                        <div class="inp_text">
+                            <label class="jb-black" for="name">이름</label>
+                            <input id="name" name="name" type="text" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;); cursor: auto;"/>
+                        </div>
+                        <div class="inp_text">
+                            <label class="jb-black" for="age">나이</label>
+                            <input id="age" name="age" type="text" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;); cursor: auto;"/>
+                        </div>
+                    </div>
+                <span class="txt_find">
+                <input type="submit" value="찾기" />
+                <button><a class="jb-black" href="/cctv/main/login" class="link_find">취소</a></button>
+                </span>
+            </div>
+                <!-- </fieldset> -->
+            <!-- </form>     -->
+        </div>
+        </div>
+        </div>
+    </form>
+</body>
+</html>

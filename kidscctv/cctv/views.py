@@ -27,66 +27,48 @@ from django.db.models import Sum, Max, Min, Count, Avg
 # Create your views here.
 
 
-def big_addr_list():
-    rows_tmp = cctv_data.objects.all().values("big_addr")
-    tmp = set()
-    for i in rows_tmp:
-        tmp.add(i['big_addr'])
-    b_addr_list = list(tmp)
-    b_addr_list.sort()
-    return b_addr_list
-
-def small_addr_list(big_addr):
-    rows_tmp = cctv_data.objects.all().values("small_addr")
-    tmp = set()
-    for i in rows_tmp:
-        tmp.add(i['small_addr'])
-    s_addr_list = list(tmp)
-    s_addr_list.sort()
-    return s_addr_list
-
 def chart_total(request):
+
+    file = open("C:/Users/admin/Desktop/project/SchoolZone-2.jpg", "rb")
+    img = file.read()
+    img64 = b64encode(img).decode("utf-8")
+    final_image = "data:;base64,{}".format(img64)
 
     font_name = font_manager.FontProperties\
         (fname='C:/Windows/Fonts/gulim.ttc').get_name() # 폰트읽기
     rc('font', family=font_name) # 폰트적용
     plt.rcParams['figure.figsize']= (14, 4)
 
+
+
     if request.method == 'GET':
         
-        # row = cctv_data.objects.big_addr.values("전라북도") => 어트리뷰트에 속한 값을 모두 가져오는 것
-        # SELECT * FROM cctv WHERE big_addr='전라북도'
+
         addr_list = cctv_data.objects.all().values("big_addr")
         
-
         big_set = set()
         for tmp in addr_list:
-            if tmp['big_addr'] == "소재지 미상" or tmp['big_addr'] == "충청북도청주시" or tmp['big_addr'] == "용인구":
+            if tmp['big_addr'] == "소재지 미상" or tmp['big_addr'] == "충청북도청주시" or tmp['big_addr'] == "용인구" or tmp['big_addr'] == "대구광역시?서구?원대동3가":
                 continue
-            big_set.add(tmp['big_addr'])
+            big_set.add( tmp['big_addr'] )
 
         big_list = list(big_set)
         big_list.sort()
-        # addr_list = ['서울특별시','인천광역시','경기도','강원도','울산광역시','경상북도','경상남도','부산광역시','대구광역시','전라북도', '전라남도','충청남도','충청북도']
+
         list_for_yn = list()
         for tmp_addr in big_list:
-
+            
             row = cctv_data.objects.filter(big_addr=tmp_addr).values("cctv_yn")
 
             tmp = []
 
             for i in row:
                 tmp.append(str(i['cctv_yn']))
-                # print(tmp)
-
-            print ("total : ",len(tmp))
-            print ("Y : ",tmp.count("Y"))
-            print ("N : ",tmp.count("N"))
 
             tot = len(tmp)
             y_num = tmp.count("Y")
 
-            y_percent = round((y_num / tot) * 100,2)
+            y_percent = (y_num / tot) * 100
             list_for_yn.append(y_percent)
             
 
@@ -94,7 +76,7 @@ def chart_total(request):
         plt.xlabel("< 도 >")
         plt.ylabel("< 퍼센트 >")
     
-        plt.bar(big_list,list_for_yn)
+        plt.bar(big_list,list_for_yn, color='gold')
 
         plt.draw()
         img = io.BytesIO()
@@ -102,7 +84,7 @@ def chart_total(request):
         img_url = base64.b64encode(img.getvalue()).decode()
 
         plt.close()
-
+        #####################################################
 
         list_for_num =list()
         for tmp_addr1 in big_list:
@@ -113,23 +95,28 @@ def chart_total(request):
         plt.xlabel("< 도 >")
         plt.ylabel("< 평균 >")
 
-        plt.bar(big_list,list_for_num)
+        plt.bar(big_list,list_for_num ,color='gold')
         plt.draw()
         img = io.BytesIO()
-        plt.savefig(img, format='png')
+        plt.savefig(img, format='png')  
         img_url1 = base64.b64encode(img.getvalue()).decode()
 
         plt.close()
 
     return render(request, "chart/total.html", \
         {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), \
-          "big_list":big_list  })
+          "big_list":big_list ,"image": final_image})
 
 def chart_big(request):
 
+    file = open("C:/Users/admin/Desktop/project/SchoolZone-2.jpg", "rb")
+    img = file.read()
+    img64 = b64encode(img).decode("utf-8")
+    final_image = "data:;base64,{}".format(img64)
+
     font_name = font_manager.FontProperties\
-        (fname='C:/Windows/Fonts/gulim.ttc').get_name() # 폰트읽기
-    rc('font', family=font_name) # 폰트적용
+        (fname='C:/Windows/Fonts/gulim.ttc').get_name()
+    rc('font', family=font_name)
     plt.rcParams['figure.figsize']= (14, 4)
 
 
@@ -143,23 +130,21 @@ def chart_big(request):
 
         test3 = list()
         addr_list = cctv_data.objects.filter(big_addr=big).values("small_addr")
-        
 
         tmp_set = set()
         for tmp in addr_list:
             if tmp['small_addr'] != "시흥로":
                 tmp_set.add(tmp['small_addr'])
-                # tmp['small_addr'][:len(tmp['small_addr'])-1]
             else:
                 continue
 
         tmp_list = list(tmp_set)
         tmp_list.sort()
-
+        ###########################
         tmp_min_list = list()
         for i in tmp_list:
             tmp_min_list.append(i[:len(i)-1])
-        
+        ########################
         tmp_list_tuple = list()
         for i in range(0,len(tmp_list),2):
             try:
@@ -168,18 +153,6 @@ def chart_big(request):
             except:
                 tmp_tuple = (tmp_list[i],)
                 tmp_list_tuple.append(tmp_tuple)
-
-        # tmp_min_list_tuple = list()
-        # for i in range(0,len(tmp_min_list),2):
-        #     if tmp_min_list[i+1]:
-        #         tmp_min_tuple = tuple(tmp_min_list[i], tmp_min_list[i+1])
-        #         tmp_min_list_tuple.append(tmp_min_tuple)
-        #     else:
-        #         tmp_min_tuple = tuple(tmp_min_list[i])
-        #         tmp_min_list_tuple.append(tmp_min_tuple)
-
-        
-
 
         for tmp_addr in tmp_list:
             row2 = cctv_data.objects.filter(big_addr=big , small_addr=tmp_addr).values("cctv_yn")
@@ -197,9 +170,9 @@ def chart_big(request):
         plt.xlabel("X축")
         plt.ylabel("Y축")
         if big =="경기도":
-            plt.bar(tmp_min_list,test3)
+            plt.bar(tmp_min_list,test3, width=0.5, bottom=0.25, align='center',label='A', color='gold',linewidth=0.5)
         else:
-            plt.bar(tmp_list,test3)
+            plt.bar(tmp_list,test3, width=0.5, bottom=0.25, align='center',label='A', color='gold',linewidth=0.5)
 
         plt.draw()
         img = io.BytesIO()
@@ -216,17 +189,16 @@ def chart_big(request):
 
             test2.append(row1['cctv_num__avg'])
             
-        print(test2)
 
         
-        plt.title("CCTV 설치대수")
+        plt.title("< CCTV 설치대수 >")
         plt.xlabel("X축")
         plt.ylabel("Y축")
         
         if big =="경기도":
-            plt.bar(tmp_min_list,test2)
+            plt.bar(tmp_min_list,test2, width=0.5, bottom=0.25, align='center',label='A', color='gold',linewidth=0.5)
         else:
-            plt.bar(tmp_list,test2)
+            plt.bar(tmp_list,test2, width=0.5, bottom=0.25, align='center',label='A', color='gold',linewidth=0.5)
 
         plt.draw()
         img = io.BytesIO()
@@ -239,9 +211,17 @@ def chart_big(request):
 
 
         return render(request, 'chart/big.html',\
-             {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), "small_list":tmp_list_tuple, "big": big})
+             {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1), "small_list":tmp_list_tuple, "big": big, "image": final_image })
 
 def chart_small(request):
+
+    file = open("C:/Users/admin/Desktop/project/SchoolZone-2.jpg", "rb")
+    img = file.read()
+    img64 = b64encode(img).decode("utf-8")
+    final_image = "data:;base64,{}".format(img64)
+
+
+
     font_name = font_manager.FontProperties\
     (fname='C:/Windows/Fonts/gulim.ttc').get_name() # 폰트읽기
     rc('font', family=font_name) # 폰트적용
@@ -271,19 +251,14 @@ def chart_small(request):
         y_percent1 = round((y_num1 / tot1) * 100,2)
         test4.append(y_percent1)
     
-        print(test4)
-
         tot2 = len(tmp)
         n_num1 = tmp.count("N")
         n_percent1 = round((n_num1 / tot2) * 100,2)
         test5.append(n_percent1)
-    
-        print(test5)
-
 
         group_names = ['Y', 'N']
         group_sizes = [test4, test5]
-        group_colors = ['lightskyblue', 'lightcoral']
+        group_colors = ['gold', 'beige']
         group_explodes = (0, 0) # explode 1st slice
         
         plt.pie(group_sizes,
@@ -332,13 +307,12 @@ def chart_small(request):
         for i in tmp_list1:
             num = test6.count(i)
             test7.append(num)
-        print(test7)
 
-        plt.title("< 시군구별 대수 비교 >")
+        plt.title("< 시군구별 대수 비교 >", fontsize=20)
         plt.xlabel("< 시군구 >")
         plt.ylabel("< 대수 >")
 
-        plt.bar(tmp_list1,test7,width=0.25, bottom=0.25, align='center',label='A', color='g', edgecolor='gray',linewidth=0.5 )
+        plt.bar(tmp_list1,test7,width=0.5, bottom=0.25, align='center',label='A', color='gold',linewidth=0.5 )
 
 
         plt.draw()
@@ -367,11 +341,11 @@ def chart_small(request):
             num = test8.count(i)
             test9.append(num)
 
-        plt.title("< 시군구 시설갯수 >")
+        plt.title("< 시군구 시설갯수 >" , fontsize=20)
         plt.xlabel("< 시설 >")
         plt.ylabel("< 갯수 >")
 
-        plt.bar(tmp_list,test9,width=0.25, bottom=0.25, align='center',label='A', color='g', edgecolor='gray',linewidth=0.5 )
+        plt.bar(tmp_list,test9,width=0.25, bottom=0.25, align='center',label='A', color='gold' ,linewidth=0.5 )
 
         plt.draw()
         img = io.BytesIO()
@@ -379,6 +353,22 @@ def chart_small(request):
         img_url2 = base64.b64encode(img.getvalue()).decode()
 
         plt.close()
+
+        
+            # row1 = cctv_data.objects.filter(big_addr=tmp_addr1).aggregate(Avg("cctv_num"))
+
+        # #### 시설 그래프 c3용
+        sisul_list = tmp_list
+        sisul_num  = test9
+        sisul_y    = list()
+
+        # SELECT cctv_yn FROM cctv_data WHERE big_addr=경상남도 and small_addr=김해시 and sisul=유치원
+        for one in sisul_list:
+            tmp = cctv_data.objects.filter(big_addr=big ,small_addr=small, sisul=one, cctv_yn="Y").count()
+            sisul_y.append(tmp)
+
+
+
         
         # small_addr이랑 user_id가 favorite에 있는지 확인
         # bool값으로 전달 (1, 0)
@@ -387,7 +377,7 @@ def chart_small(request):
         row2 = cctv_data.objects.filter(big_addr=big, small_addr=small).values('no')
         check_no = row2[0]['no']
         # SELECT * FROM CCTV_FAVORITE WHERE REGION_NO_ID= check_no and USER_ID_ID=request.session['user_id']
-        check_fav = ""
+        check_fav = False
         try:
             check_fav = favorite.objects.filter(region_no=check_no, user_id=request.session['user_id'])
             if check_fav:
@@ -396,117 +386,45 @@ def chart_small(request):
                 check_fav = False
         except:
             pass
-
+        
 
     return render(request, 'chart/small.html', \
         {"graph1":'data:;base64,{}'.format(img_url), "graph2":'data:;base64,{}'.format(img_url1),\
-         "graph3":'data:;base64,{}'.format(img_url2), "big":big, "small":small, "check_fav": check_fav})
+         "graph3":'data:;base64,{}'.format(img_url2), "big":big, "small":small, "check_fav": check_fav, \
+         "image": final_image , "y": y_num1 , "n": tot1-y_num1, \
+         "sisul_list": sisul_list, "sisul_num": sisul_num, "sisul_y": sisul_y  })
 
 def chart_favorite(request):
     big = request.GET.get("big", "") 
     small = request.GET.get("small", "")
 
-    # SELECT * FROM CCTV_USER_TABLE WHERE user_id=request.session['user_id']
     row1 = user_table.objects.get(user_id=request.session['user_id'])
-    print(row1)
     fav_usr = row1
 
-    # GET 1개 -= 객체
-    #     여러개 - 에러 안뱉음
-
-    # filter 1개 = 그 데이터
-    #        여러개 = 객체의 리스트
-
-
-    # SELECT NO FROM CCTV_CCTV_DATA  WHERE big_addr='전라남도' and small_addr='고흥군' and rownum <=1
     row2 = cctv_data.objects.filter(big_addr=big, small_addr=small)
     fav_reg = row2[0]
-    print(fav_usr)
-    # print(fav_reg)
 
-    print(type(request.session['user_id']))
     obj = favorite()
     obj.region_no = fav_reg
     obj.user_id = fav_usr
     obj.save()  
-    # INSERT INTO CCTV_FAVORITE(REGION_NO_ID, USER_ID_ID) VALUES ( fav_reg , request.session['user_id'] )
-
     return redirect("/cctv/chart/small?big="+ big + "&small=" + small)
 
 def chart_unfavorite(request):
     big = request.GET.get("big", "") 
     small = request.GET.get("small", "")
 
-    # SELECT NO FROM CCTV_CCTV_DATA  WHERE big_addr='전라남도' and small_addr='고흥군' and rownum <=1
     row2 = cctv_data.objects.filter(big_addr=big, small_addr=small).values('no')
     check_no = row2[0]['no']
 
-    # DELETE FROM CCTV_FAVORITE WHERE REGION_NO_ID= check_no and USER_ID_ID=request.session['user_id']
     favorite.objects.get(region_no=check_no, user_id=request.session['user_id']).delete()
     return redirect("/cctv/chart/small?big="+ big + "&small=" + small)
 
-
-def chart_barplt(request):
-    rows_tmp = cctv_data.objects.filter(big_addr="강원도").values("cctv_yn")
-    tmp = list()
-    for i in rows_tmp:
-        tmp.append(i['cctv_yn'])
-    tmp.sort()
-    print(tmp)
-    total = len(tmp)
-    Y_num = 0; N_num = 0
-    for i in tmp:
-        if i =="Y":
-            Y_num += 1
-        elif i == "N":
-            N_num += 1
-    print(total)
-    print(Y_num)
-    print(N_num)
-    
-
-
-    x = ['total', 'Y', 'N']
-    y = [total, Y_num, N_num]
-    plt.bar(x,y)
-    plt.title("please")
-    plt.xlabel("X축")
-    plt.ylabel("Y축")
-
-    plt.draw()
-    img = io.BytesIO() # img에 byte배열로 보관
-    plt.savefig(img, format="png") # png파일 포맷으로 저장
-    img_url = base64.b64encode(img.getvalue()).decode()
-    plt.close() # 그래프 종료
-
-    return render(request, "chart/barplt.html",{"graph1":'data:;base64,{}'.format(img_url)})
-
-
-def chart_list(request):
-    print(big_addr_list())
-    print(small_addr_list("경상남도"))
-
-    # rows = cctv_data.objects.filter(big_addr="경상남도", small_addr="김해시")
-    rows = cctv_data.objects.filter(big_addr="경상남도")
-    print(rows)
-    return render(request, 'chart/list.html',{"list":rows}) 
-
-
-def article_insert(request):
-    """
-        나중에 혼자서 합시다~~~
-    """
-    return HttpResponse("Dont try this")
-
 def add_csv():
-    # C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/csv
-    # path = r'C:/Users/admin/Desktop/python_crawling/python_crawling/project/resources' # use your path
     path = 'C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/csv'
-    # path = 'C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/csv_tmp'
     all_files = glob.glob(path + "/*.csv")
 
     li = []
-
     for filename in all_files:
         try:
             df = pd.read_csv(filename, index_col=None, header=0, encoding="euc-kr")
@@ -516,7 +434,6 @@ def add_csv():
 
     frame = pd.concat(li, axis=0, ignore_index=True)
     return frame
-
 
 def chart_insert(request):
     frame = add_csv()
@@ -535,7 +452,7 @@ def chart_insert(request):
     cctv_num = list()
     
     # big_addr / small_addr
-    addr = frame.loc[:, ['소재지지번주소']].values
+    addr = frame.loc[:, ['소재지지번주소']].values # 경상남도 김해시 ~~
     for tmp in addr:
         try:
             big_addr.append(tmp[0].split(" ")[0])
@@ -596,11 +513,6 @@ def main_join(request):
             obj.age = request.POST['age']
             obj.home = request.POST['home']
             obj.save()
-            """
-            ar = [request.POST['user_id'], request.POST['name'], request.POST['password'], request.POST['age'], request.POST['home']]
-            sql = "INSERT INTO MEMBER(ID,NAME,PW,AGE,HOME) VALUES (%s, %s, %s, %s, %s)"
-            cursor.execute(sql,ar)
-            """
             return redirect("/cctv/main/index")
         else:
             return render(request, 'main/join.html', {'error': 'Incorrect password'})
@@ -636,24 +548,123 @@ def main_logout(request):
 @csrf_exempt
 def main_mypage(request):
     if request.method == 'GET' :
-        return render(request, 'main/mypage.html')
+        rows1 = article_scrap.objects.filter(user_id=request.session['user_id']).values("article_no")
+
+        scr_no_list = list()
+        for i in rows1:
+            scr_no_list.append( i["article_no"] )
+        
+
+
+        return render(request, 'main/mypage.html', {"scr_no_list":scr_no_list})
+
+@csrf_exempt
+def main_idfind(request):
+    if request.method == 'GET':
+        return render(request, 'main/idfind.html')
+    elif request.method == 'POST':
+        na = request.POST['name']
+        ag = request.POST['age']
+        ar = [na,ag]
+        print(ar)
+        sql = """
+            SELECT USER_ID, NAME, AGE
+            FROM CCTV_USER_TABLE
+            WHERE name=%s AND age=%s
+        """
+        cursor.execute(sql, ar)
+        data = cursor.fetchone()
+        print(data)
+
+        if data:
+            return render(request, 'main/login.html', {'user_id': data[0]})
+            #return redirect('/cctv/main/idsuccess')
+        else:
+            return render(request, 'main/idfind.html', {'error': 'Incorrect Information'})
+        
+def main_pwfind(request):
+    if request.method == 'GET':
+        return render(request, 'main/pwfind.html')
+    elif request.method == 'POST':
+        na = request.POST['name']
+        ag = request.POST['age']
+        id = request.POST['user_id']
+        ar = [na,ag,id]
+        sql = """
+            SELECT password
+            FROM CCTV_USER_TABLE
+            WHERE name=%s AND age=%s AND user_id=%s
+        """
+        cursor.execute(sql, ar)
+        data = cursor.fetchone()
+        print(data)
+        
+        if data:
+            return render(request, 'main/login.html', {'user_pw': data[0]})
+            #return redirect('/cctv/main/idsuccess')
+        else:
+            return render(request, 'main/pwfind.html', {'error': 'Incorrect Information'})
+
 
 # 기사 - 지윤
-
 def article_main(request):
     if request.method == 'GET':
+
+        # ####################################################
+        # 세션 유저가 스크랩한 기사 리스트
+        # Html 보내고
+        # 거기 안에 기사 번호가 있으면
+        # 스크랩 버튼 바꿔주기
+        # Unscrap url 생성
+
         page = int(request.GET.get("page",1))    
         list1 = article.objects.all()[page*6-6:page*6]
         cnt = article.objects.all().count()
         total = (cnt-1)//6+1    
 
-        # 스크랩 했는지 확인
-        # SELECT * FROM ARTICLE_SCRAP WHERE user_id=로그인한 아이디 and art_no=해당 기사 기본키
+        row1 = article_scrap.objects.filter(user_id=request.session['user_id']).values("article_no")
+        scr_no_list = list()
+        for i in row1:
+            scr_no_list.append( i["article_no"] ) # [ 2, 4, 6]
 
+        return render(request,'article/main.html',{"list":list1, "pages":range(1,total+1,1), "page": page, "scr_no_list": scr_no_list} )
 
-        return render(request,'article/main.html',{"list":list1, "pages":range(1,total+1,1), "page": page} )
+def article_scr_list(request):
+    blank_list = list()
+    scr_no_list = request.GET.get("scr_no_list", blank_list) # "[1,2,3,4,5]"
+    if scr_no_list == "[]" or not scr_no_list:
+        list1 = list()
+    else:
+        tmp_list = scr_no_list[1:-1].split(", ") # "[1, 2, 3, 4, 5]" -> ["1", "2", "3"]
+        for i in range(len(tmp_list)):
+            tmp_list[i] = int(tmp_list[i])
 
-     
+        # User.objects.filter(id__in=[1, 5, 34, 567, 229])
+        list1 = article.objects.filter(no__in=tmp_list)
+
+    row1 = article_scrap.objects.filter(user_id=request.session['user_id']).values("article_no")
+    scr_no_list = list()
+    for i in row1:
+        scr_no_list.append( i["article_no"] )
+
+    return render(request,'article/scr_list.html', {"list":list1, "scr_no_list": scr_no_list})
+
+def article_unscrap1_scr(request): 
+    no = request.GET.get("no", "") 
+
+    # DELETE FROM article_scrap WHERE article_no= no and USER_ID_ID=request.session['user_id']
+    article_scrap.objects.get(article_no=no, user_id=request.session['user_id']).delete()
+
+    rows1 = article_scrap.objects.filter(user_id=request.session['user_id']).values('article_no')
+    scr_no_list = list()
+    for i in rows1:
+        scr_no_list.append( i["article_no"] )
+    url = "/cctv/article/scr_list?scr_no_list=["
+    for i in scr_no_list:
+        url = url + str(i) + ", "
+    url = url[:len(url)-2] + "]"
+    return redirect(url)
+
 def article_scrap1(request):
     no = request.GET.get("no", "") 
     page = request.GET.get("page", "") 
@@ -661,23 +672,28 @@ def article_scrap1(request):
     # SELECT * FROM CCTV_USER_TABLE WHERE user_id=request.session['user_id']
 
     row1 = user_table.objects.get(user_id=request.session['user_id'])
-    print(row1)
     scr_usr = row1
 
     # SELECT * FROM CCTV_ARTICLE WHERE no=no
     row2 = article.objects.get(no=no)
-    print(row2)
     scr_art = row2
 
     obj = article_scrap()
     # obj.scrap_date = "SYSDATE" # YYYY-MM-DD
-    obj.scrap_date = "2020-01-01" # YYYY-MM-DD
+    # obj.scrap_date = "2020-01-01" # YYYY-MM-DD
     obj.article_no = scr_art 
     obj.user_id = scr_usr
     obj.save()  
 
     return redirect("/cctv/article/main?page="+page)
 
+def article_unscrap1(request):
+    no = request.GET.get("no", "") 
+    page = request.GET.get("page", ) 
+
+    # DELETE FROM article_scrap WHERE article_no= no and USER_ID_ID=request.session['user_id']
+    article_scrap.objects.get(article_no=no, user_id=request.session['user_id']).delete()
+    return redirect("/cctv/article/main?page="+page)
 
 def main_myfav(request):
 
@@ -711,7 +727,6 @@ def main_myfav(request):
     
     return render(request,'main/myfav.html',{"final":final_list})
 
-
 def main_myscrap(request):
     # SELECT region_no FROM favorite where user_id= sessrion id
     rows = article_scrap.objects.filter(user_id=request.session['user_id']).values("article_no")
@@ -734,3 +749,4 @@ def main_myscrap(request):
         final_list.append(dic1)
     
     return render(request,'main/myscrap.html',{"final":final_list})
+

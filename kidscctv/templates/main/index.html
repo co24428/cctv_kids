@@ -1,14 +1,31 @@
 {% include "../header.html" %}
 <style>
-    img {
-        max-width: 100%;
-        width: 1950px;
-        height : 300px;
+    .button {
+    background-color: #FFFF8C;
+    border: dashed;
+    color:#fff;
+    padding: 15px 0;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 4px;
+    cursor: pointer;
+    }
+    .text {
+    text-indent: 20px; 
     }
 </style>
+</style>
 {% include "../navbar.html" %}
-    <img src ="http://www.mindforest.kr/resources/Sailor/img/slides/flexslider/2.jpg">
-
-    <button type = "button" style= "width: 250pt; height:50pt; " name = "btn1" ><a href="/cctv/chart/total">chart</a></button>
-    <button type = "button" style= "width: 250pt; height:50pt; " name = "btn1" ><a href="/cctv/article/main">article</a></button>
+    <img src ="https://img.sbs.co.kr/newimg/news/20180503/201178296_1280.jpg" width="1200" height="400" style="margin-left: auto; margin-right: auto; display: block;"></img>
+    
+    <div style="width: 50% ; margin: auto; display: block; text-align: center;"> 
+        <button type = "button" onclick="location.href='/cctv/chart/total'" style= "width: 400pt; height:100pt; " name = "btn1" class ="button" >
+            <img src ="https://post-phinf.pstatic.net/MjAxODA5MDVfNzIg/MDAxNTM2MTQ5NjY5NDY4.BP1IaZSfHepkne67tQGOGnyU8nY4AxHTjvzXh8nYM68g.SFEV_WQTfdPWaNXdnLbWes2pSW8NeFU58YJj2-_mJ20g.PNG/Gauge_Chart_Sample.png?type=w1200" width="150" height="100">
+            <font size = "10" color ="sky blue">chart</font>
+        </button>
+        <button type = "button" onclick="location.href='/cctv/article/main'" style= "width: 400pt; height:100pt; " name = "btn1" class ="button" >
+            &nbsp&nbsp&nbsp&nbsp<img src ="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMEAAAEFCAMAAABtknO4AAAAbFBMVEX///8AAAAmJiaLi4ukpKSUlJTg4OCrq6vv7++IiIhsbGxoaGjCwsK0tLT8/PwyMjLq6uoJCQlXV1f39/dBQUEdHR1RUVE8PDxdXV3S0tKfn59xcXG6urp7e3tMTEywsLDJycnb29sWFhYqKipJWIyaAAAEs0lEQVR4nO2d7XLaQAxF1xA+A8aGUAKBhDTv/45Nmrax2RVYxt2rDff8yww7ozMOtpBXWue+mE2e12WG50fu2lBM0IF/sWwjMEBHXWOqvwBLdMwnHJQCww06Yo+B7grYE8iyncbgER1tkJfmAnfoWAVmTQXGFh4BQbYNDWzdR2sMmxmYvQTvFE0Etugoz7FeNTDYoaM8y6KBwrS2ouzfoTgEFRpkeQ+1BQ2/O/+DY/gq3F9c+Fb9uDYd6ZKZ8I90MaZe9dP9GKEKSAYXg7JvcCnLS8AgG51dmIJBtj+3MAmD7HhmYRoG2au8MBGDMylSKgbZWFpo06DsewY9KUWyaZANR57Cg6Bg1SDwy+sxnOWZNXB+EfEpuNCugXvyFCahhYYNcr+SGEqRDBu4vP7j5YM7f6FlA7daeAp+Icy0gSvWnoJXCLNt4F79YtBpIcy4QagadPJj3rpBKF+qp0jmDdzeMyhr+YV9A+enSJuqQgIGgbpitRCWgoHzc+3pl0ISBs4vSX4VwtIwyO89hX8pUhoGbvXsKfx9V5iIQShF+lMIS8UgpPBZCDNqsJufsg+8qzkaNmjIa/IGH4WwxA3eU6TEDbKH5A3WyRv0aNAdLTcXGDIY+8/cxAxabrKxZBBIPxMzcOM2CqYMnHvR71k0ZvD+Y2x8kdXEtEET+jSAQwM8NMBDAzw0wKM32O4G8ZnL+5W1BitUi8i8KwNcm5TUBKI0mMeNusq6GwN/i0w8hDYWnUFgh0w8hH8j5TWo9yfEpZNrgPwe/AwLaA3yH3HDriDtttbeTceo54G4413/TD4OJtHpj+RtyreYF1mDBnhogIcGeGiAhwZ4aICHBnhogIcGeGiA5xYN9odpdJ4G8gAWrUHRbv/b9YiDNrR1U5RAsIu0jQFyTpkw+Udp4DfAxOPYhcE3eIeDfI8mDApRGrTcDt0Fi7CA+m6KuwjSRD6tQQ4a3bo5CgItnsnD/Sg6L0d5iNot5kXWoAEeGuChAR4a4KEBHhrgoQEeGuChAZ6bNFhdbljtnDPz3tUGw8OmF5235Uh00BoIE+X/P0tJQWlQxA27ijSzXmngjzGLhzBeWWmAPCynk/cHefIGgXnB8RA28CsNXmOGXOcxLKC+m/pzISOxkOakq59oM0gnzttBHPSuzyryIQAx/hvN7IxBAzw0wEMDPDTAQwM8NMBDAzw0wEMDPDTAozbI94f76EwH8umM6h6QVuN3O0A8j15psPJP+IqFdB690gBWNs2+Qw8I53h9kvwsNWQPSC8soL6b4oapddUDgnqTtjgKAi2yimJ+F50Re0BMQwM8NMBDAzw0wEMDPDTAQwM8NMBDAzw0wEMDPDTAQwM8NMBDAzw0wEMDPDTAQwM8NMBDAzw0wEMDPDTAQwM8NMBDAzw0wEMDPDTA8+0M3qp/SjPwbHGohrxw9YY5+TgpOwxrET+ctNmU/fjtHkr6ZS3iqdtlabNzW3QIV7J1rrz8KcOU71+MATqIq/g4Bm6c8kUof4+9Q57hdi1/jrFDDgC9jr+zK4sNOpKWbP6NThymqbCpZBAFso+6Lcv6ANf07qnecZoFchyunklwgu5s8ry2/3Ao18+TagP/L6FhfwP9MpSHAAAAAElFTkSuQmCC" width="100" height="100">
+            <font size = "10" color ="sky blue" class = "text">&nbsp;&nbsp;article</font>
+        </button>
+    </div>
 </body>

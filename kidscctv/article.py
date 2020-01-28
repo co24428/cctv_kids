@@ -15,7 +15,7 @@ options.add_argument("lang=ko_KR")
 options.add_argument('user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
 
 # 각자 경로 맞춰서
-driver = webdriver.Chrome("C:\\Users\\admin\\Desktop\\python_crawling\\python_crawling\\chromedriver.exe", chrome_options=options)
+driver = webdriver.Chrome("C:/Users/admin/Desktop/project/cctv_kids/kidscctv/chromedriver.exe", chrome_options=options)
 
 # 20개 
 # 1페이지
@@ -87,26 +87,26 @@ conn.commit()
 
 
 # 이미지가 필요할 때
-    # if count == 1:
-    #     idx = 0
-    # elif count == 2:
-    #     idx = 20
-    # elif count == 3:
-    #     idx = 40
-    # for i in link:
-    #     driver.get(i)
-    #     time.sleep(1)
-    #     tmp = driver.find_element_by_xpath('//*[@id="textBody"]')
-    #     img_table = tmp.find_element_by_tag_name('table')
-    #     try:
-    #         file = img_table.find_element_by_tag_name('img').get_attribute("src")
-    #         # path부분 각자 경로 맞게 변경
-    #         path = "C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/art_thumnail/"
-    #         file_name = "newsis" + str(idx) + ".png"
-    #         urllib.request.urlretrieve(file, path + file_name)
-    #         print("image save!!")
-    #         idx += 1
-    #     except Exception as e:
-    #         idx += 1
-    #         continue
-    # count += 1
+#     if count == 1:
+#         idx = 0
+#     elif count == 2:
+#         idx = 20
+#     elif count == 3:
+#         idx = 40
+#     for i in link:
+#         driver.get(i)
+#         time.sleep(1)
+#         tmp = driver.find_element_by_xpath('//*[@id="textBody"]')
+#         img_table = tmp.find_element_by_tag_name('table')
+#         try:
+#             file = img_table.find_element_by_tag_name('img').get_attribute("src")
+#             # path부분 각자 경로 맞게 변경
+#             path = "C:/Users/admin/Desktop/project/cctv_kids/kidscctv/static/img/art_thumnail/"
+#             file_name = "newsis" + str(idx) + ".png"
+#             urllib.request.urlretrieve(file, path + file_name)
+#             print("image save!!")
+#             idx += 1
+#         except Exception as e:
+#             idx += 1
+#             continue
+#     count += 1

@@ -25,7 +25,8 @@ SECRET_KEY = 'e2zqwk5v)+n+9bwop9&xiea6%4l^$f25=_vq1uauoxf^b4$d%&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+# python manage.py runserver 0.0.0.0:8000 추가해야 함
 
 
 # Application definition

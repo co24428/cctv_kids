@@ -2,9 +2,9 @@
 <style type="text/css">
 	.vi{
 		border-radius: 5px;
-		background-color: #A9F5A9;
+		background-color: #FFD232;
 		border-style: solid;
-	    border-color: #5d5d5d;
+	    border-color: #FFD232;
 	    border-width: 2px;
 	    color: #FFFFFF;
 		margin-bottom: 5px;
@@ -22,6 +22,11 @@
     }
 </style>
     {% include "../navbar.html" %}
+    {% if user_pw %}
+        <h1>password = {{user_pw}}</h1>
+    {% elif user_id %}
+        <h1>id = {{user_id}}</h1>
+    {% endif %}
     <form action="/cctv/main/login" method="post">
         {% csrf_token %}
         <div id="" class="margin-center vi" style="margin-top: 70px;">
@@ -45,9 +50,9 @@
                     </div>
                 <button type="submit" class="btn_login">로그인</button>
                 <span class="txt_find">
-                <a class="jb-black" href="/cctv/main/user_id" class="link_find">아이디</a>
+                <a class="jb-black" href="/cctv/main/idfind" class="link_find">아이디 찾기</a>
                 <label class = "jb-black"> / </label>
-                <a class="jb-black" href="/cctv/main/password" class="link_find">비밀번호 찾기</a>
+                <a class="jb-black" href="/cctv/main/pwfind" class="link_find">비밀번호 찾기</a>
                 </span>
             </div>
                 </fieldset>

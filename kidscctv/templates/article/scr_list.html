@@ -6,8 +6,8 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>기사 목록</h1>
-      <p class="lead text-muted">'어린이 보호구역' 관련 기사입니다.</p>      
+      <h1>스크랩 기사 목록</h1>
+      <p class="lead text-muted" hidden>'어린이 보호구역' 관련 기사입니다.</p>      
     </div>
   </section>
 
@@ -27,11 +27,9 @@
                 <div class="btn-group">
                   <button type="button" class="btn btn-sm btn-outline-secondary" ><a href={{one.link}}>기사 보기</a></button>
                   {% if one.no in scr_no_list %}
-                    <button onclick="location.href='/cctv/article/unscrap?no={{one.no}}&page={{page}}'" 
-                      type="button" class="btn btn-danger" >unscrap</button>
+                    <button onclick="location.href='/cctv/article/unscrap_scr?no={{one.no}}'" type="button" class="btn btn-danger" >unscrap</button>
                   {% else %}
-                    <button onclick="location.href='/cctv/article/scrap?no={{one.no}}&page={{page}}'" 
-                      type="button" class="btn btn-success" >scrap</button>
+                    <button onclick="location.href='/cctv/article/scrap?no={{one.no}}'" type="button" class="btn btn-success" >scrap</button>
                   {% endif %}
                 </div>
                 <small class="text-muted">{{one.report}} <br>{{one.pub_date}}</small>
@@ -45,7 +43,7 @@
  </div>   
 </main>
 
-<div class="row justify-content-center">
+<!-- <div class="row justify-content-center">
   <nav aria-label="Page navigation example">
       <ul class="pagination">
           {% for i in pages %}
@@ -55,7 +53,7 @@
           {% endfor %}                    
       </ul>
   </nav>
-</div>   
+</div>    -->
 
 <footer class="text-muted">
   <div class="container" style="margin-bottom: 50px;">

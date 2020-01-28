@@ -1,17 +1,27 @@
 {% include "../header.html" %}
 <style>
-    img {
-        max-width: 100%;
-        width: 1950px;
-        height : 300px;
+    .button {
+    background-color: #FFFF8C;
+    border: dashed;
+    color:#fff;
+    padding: 15px 0;
+    text-decoration: none;
+    font-size: 15px;
+    margin: 4px;
+    cursor: pointer;
     }
 </style>
     {% include "../navbar.html" %}
-    <img src ="http://www.mindforest.kr/resources/Sailor/img/slides/flexslider/2.jpg">
-    <div style = "padding:10px;">  
-        <button type = "button" style= "width: 250pt; height:50pt; " name = "btn1" ><a href="/cctv/main/myscrap">기사스크랩</a></button>
-    </div>
-    <div style = "padding:10px;">  
-        <button type = "button" style= "width: 250pt; height:50pt; " name = "btn2" ><a href="/cctv/main/myfav">관심지역</a></button>
+    <img src ="https://img.sbs.co.kr/newimg/news/20180503/201178296_1280.jpg"width="1200" height="400" style="margin-left: auto; margin-right: auto; display: block;"></img>
+    <div style="width: 50% ; margin: auto; display: block; text-align: center;"> 
+        <button type = "button" onclick="location.href='/cctv/article/scr_list?scr_no_list={{scr_no_list}}'" style= "width: 400pt; height:100pt; " name = "btn1" class ="button" >
+            <img src ="http://2.bp.blogspot.com/-cjpCfuUjq8k/U0sm8c2OgII/AAAAAAAAAEQ/2MQEJS88_tk/s1600/news_2.png"width="150" height="100">
+            <font size = "10" color ="sky blue">기사스크랩</font>
+        </button>
+        <button type = "button" onclick="location.href='/cctv/main/myfav'" style= "width: 400pt; height:100pt; " name = "btn1" class ="button" >
+            <img src = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEBUSEhMSEhAVFRIVFRUVFhUVGBUXFRUYFxUVFRUYHSggGh0lGxUWITEhJSktLi4uGB8zODMtOygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEAAwADAQEAAAAAAAAAAAAAAQIHBAYIBQP/xABGEAACAQMBAwcGCggFBQAAAAAAAQIDBBEhBRIxBgcTQVFhgSIycZKh1BQXI1JVcoKRseEkM0KDorPB0SVDVNPwFUVik6P/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A2cAACIvJEmTECQAAAAAAhsCQVwWTAAAAAAAAAERedSGyYgSAAAAAAENgSCpZMAAABVyJaIigEYlgAAAAAAAQiSGgJf8AzvCQSAAAAAAAKNlpLQhLrAJFgAAAAAAAREkhoCQkEgAAAAAAAAAAAAAAAAAAAAHzNs8obS0X6TXpUm9VGUvKf1YLMn4I6pdc7uzY+Z8JrfUpKP8ANlADvwM/ted/Z0vOjdUl2zpwf8ucn7Ds+xOVdld4VvcU5zeu424VP/XNKXsA+yAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD87ivGnCU5yjCEU5SlJpKKWrbb4IxjlrzrVarlRsG6NHg6+MVKn1E/1ce/zvqnH52+WTua0rOjL9GoyxUaf62rF6r6sHp3yTfUmZ0BM5uUnKTcpSeZSk3KUn2yk9W+9kw7er8e4RXW+H49yORZ2FevnoaNatjR9FSqVMdz3E8AfhLXX2dn5FP6arua4NHMvNl3NBb1a3uKMfnVaNSnHs86cUjitdaA75yN5z7m1cady5XNtosyeatNdsZvz1/4yfoa4G4bM2jSuKUa1CaqUprMZL2primno09Uzyidv5uOWMtn3G7Nt2dWSVVfMfBVortWme2Pa0gPRIITzqtV1NdfoJAAAAAAAAAAAAAAABDYEgrj0kpgSAAAAAHXecDbjstnVq0Xiq0qdLuqVHuxl9nLl9k7EZVz9XXyVpRX7VSrUx29HFQX81gY5FdWr9rZZxw8Pq4/2PoW1soLfl5yzrxS6urjrnPYuHaceFLpq8KcfJ6SpTpx7t+SgsdyyBonNjzfQuoq8vI5oZ+Ro6pVN16zn17mc4X7WrenHZ6FGMIqEIxhCKxGMUoxS7EloitrbRpQjTglGnCMYRS4KMViK+5GHc5nLm5q3dW2oVZ0bajN030UnCVScHicpzjh4Uk4qOcaZec6Bu0llYaynxT4P0oynnK5uafRzvLKHRzgnOrRgvJnFaynTivNklq4rRrOmePSeR3Lu6s68HUrVKtq5JVadWcppRbw5wcm3GUVrpo8YfavRgHkfIPscsNnRttoXNCGkIVZbq7IyxOEV6IyS8DgUKLytN6b82PYvnS/ov+MN25nttu42cqc3mpbS6Ft9cMJ0n4Re79g7yY1zKV5wva9CUVFzoKpokt7o6ijnTT/NZsqYAAAAAAAABkReSrZaIEgAAQiQ0AyEiEiQAAAAAAZZz2UVmzqvGIuvDVZ87o5NLPXiD8EzUpI6Xzu7KdfZdSSWZ0JRrr6sMqp/85SfgBgVarpup5imte3CwvQlrhd4srjoqtOrjPR1KdTHb0c1LHsPxJSA9aUK8akIzg1KE4xlFrg4yWU14MwbnN5GXFC8q3FOnOpbVpyq70IuXRym96caiWq8pyafDDXWfX5recGFCCsryW5Sj+orPzYJ/wCVUfVFPhLguDwkjZKc00pRaaaymnlNdqa4gebuR/Iy4vq8Y9FOFspRdWrOMox3M+VGLfnSayklwzlnpIlsy/nM5xadOnO0s5qdeacKlWDzGlF6SjGS41HqtPN168IDL+Wl/G42jdVoawnWluvtjBKnGS7moJ+Jw6dw4TjUS3k4pPvailJdzyjhYx3F6dTGeDT4p8H+feBq3NDSdS9lXa3VG2nGMc9VSpTeW/sew19IzfmQ2e1aVbmSSdaooQxw6OhmKS+3KovA0gAAAAAAFG8lpIRQCKJAAAAAAAAAAAAAAABStSjOMoSW9CScZJ9aaw19zLgDytt7ZUrS6rW0st0puKb4yjxpyfpg4vxOAa1z57B1pX0FppQre10pv+KPjAyUC/H0/j+ZzNmbburbShcV6K18mFSUY68XuZ3c9+DgF+Pp/H8wPo7S5RXlxHdrXVxUhwcZVJbr9ME8PxR81LH9EMY9PZ/cqwDP0oUJVJxpwW9UnKMILtlNqMV4to/M0PmW2D017K6kvkrZeT31ppqPqx3n6XADZ9hbMja2tG3hrGlTjDPzml5Un3t5fic4AAAAAAAAAAAAAAAAAAAAAAAAAAAAODtzZcLq2q29TzKsHFvri/2ZLvTSa9B5dv7KdCrOjVW7VpzlCa74vGV3Pin1po9YGO8+HJzdnC/prSW7Sr4+clilUfpS3G+6AGUlsY/t/cLT+n9yrAvnP1vx/MoC/H0/j+YFUm3hJtvCSSy23wSXW2emeQ2wFY2NKg8dJjfqtddWestetLSK7ooyTmc5N/Cbz4TOOaNq1JZ4SrPWmvs+f3PcN5AAAAAAAAAAAAAAAAAAAARF5KuRaKAkAAAAAb7dEZLs3b+29p1K9XZ9WhTtIVpQgqkYLyeMMN05NvdcZPPDeO186u2/guy6zTxUrLoIa4fyie+0+1U1N+lI5nIDYvwPZ1Ci1io49JV7ekqeVKP2cqPoiB1f4Dyo/wBTZfwf7B2HYuy72vaV7bazo1OkyozpNeZJcGtyKUoyW8njrXYdo3fAlMDyrtnZlS1uKlvV/WUpOLfVLrjNd0otSXczhG0c9fJnpKUb+mvLopQrY/apN+TP7Em/CT+aYuAL0KMpzjCEXKpOUYQiuMpSeIxXpbSKGo8yfJnpKsr+ovIpOUKGeuo1idT7Ke6u+Uvmgd4o7AurLZULXZ7o/DPJc6tR4jvN5qzxuyy9N1JrRY7D4fwHlR/qbL+D/YNLDAyXbd9yjsqXwitVtqlKM4JxhGEm96WEpfJRai3hZT0yjUtm3sK9GnWp606sIzj9WSyvYz8ds2EbihVoS82pCUNdUsrCeOvDwzp3M/taU7ataVMqtaVpxcW8tRnKTx4TVWPcooDv4AAAAAAV4gWBXdLJgAAAKOWS7RCj2gRFFgAAAAAH4X95CjSqVqjxTpwnUm+yME5P2IDNuVn+IbetbFa0LVdNXWdM+TUakvQqMf3jNPX5mb8zlpOqrraVZfK3VWSj14hGTlPD7N97v7pGktAAkEgBStSjOLhJKUJJxlF6pprDTXY0eaOW3JyWz7ydDV0n5dGT/apyb3cvrcWnF+jPWemjrXLnkfS2lRjCUuirU23SqqO9u7yxKMo5WYvCysrWK7APPewdk1Lu5p21Lz6ksZxlQitZzfdGKb8MdZ6e2Ts6nbUKdCksU6cVGPbpxbfW28tvtbOs8geQVPZu/UdTp7ia3XU3NxRhnO7COW1lpNvOu6uGDuIBso3ktJBL7wEUZhfP/p3KSFTzbfaEN2WuiqNqL8ekVN/vWagdG54djuvs51YZVa1kq0WuKjwqYfcsS+wgO8g+TyT2wryyoXKxmpBb6XVUj5NSPhOMj6wAAACI+0khoASkEgAAAAAAAAAAAAz/AJ5tqyhZwtKflV7upGnGKeG4xcW14zdOP2maAZfbf4jyllPzrfZ8cLg06kW0vHpJTf7lAaDsHZkbW1o28dVSpxhn5zS8qXjLL8TngAAAAAAAAAAAAKV6MZxlCa3oSi4yT61JYa+5lwBmfNLcStri82VVeZ0KjqU23rKOVGTx3rop/vGaYZfzg/oG17Paa0pVH0Fx1LCWG32/Jyb/AHKNQAAAAAAAAAAAAAAAAAAAAZXS5o7inKbpbWrUt9ty3KVSMpatpzcLiO89XrjrfDJqgAzD4r776buvVuPeh8V999N3Xq3HvRp4AzD4r776buvVuPeh8V999N3Xq3HvRp4AzD4r776buvVuPegua+9+m7r1bj3o08AZlLmxvn/3u6z3Rrr2fCivxX3303derce9GngDMPivvvpu69W496HxX3303derce9GngDMPivvvpu69W496HxX3303derce9GngDKrrmkuasd2rtetVhnO7UpVakc9u7K5azq9e80zZlr0NCnSc5VHTpwhvy86e5FR3pY63jJyQAAAAAAAAAAAAAhgSCHEJgSAAAAAABsARFlWy0UBIAAAAAAV4gWBG794TAkAAAAAAIkwEn95KKYLgAAAIJDQD0hIJAAAAAAANlN4u0RGICKJAAAAAAABCJDQEEpBIAAAAAAESZVFpIlAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/2Q=="width="150" height="100">
+            <font size = "10" color ="sky blue">&nbsp;&nbsp;&nbsp; 관심지역</font>
+        </button>
     </div>
 </body>
+

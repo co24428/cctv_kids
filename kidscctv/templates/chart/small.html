@@ -1,27 +1,145 @@
 {% include "../header.html" %}
 {% include "../navbar.html" %}
-    
-      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" style="border:2px solid #F0F;">
-        <h1 class="display-7">도 별 어린이 보호구역 정보</h1>
-        <p class="lead">도 별로 어린이 보호구역에 관련된 차트와 정보를 볼 수 있습니다</p>
-      </div>
-      <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" style="border:2px solid #F0F;">
+
+
+<div style="position: relative;">
+
+  <img src ={{image}} width="1250" height="500" style="margin-left: auto; margin-right: auto; display: block;"></img>
+  <div style= "left: 1250px; width: 450px; bottom: 365px; font-size: 1.8em; font-weight: bold; position: absolute; color: white;">
+    {{big}} {{small}}
+    <h3></h3>
+    어린이 보호구역 정보
+  </div>
+</div>
+      <hr width="1250" ></hr>
+      <div >
         {% if request.session.user_id %}
           {% if not check_fav %}
-          <button onclick="location.href='/cctv/chart/favorite?big={{big}}&small={{small}}'" type="button" class="btn btn-success">favorite</button>
+          
+          <button onclick="location.href='/cctv/chart/favorite?big={{big}}&small={{small}}'" type="button" 
+            class="btn btn-outline-warning" style="margin-left:327px; margin-right: auto; display: block;" >favorite</button>
           {% else %}
-          <button onclick="location.href='/cctv/chart/unfavorite?big={{big}}&small={{small}}'" type="button" class="btn btn-danger">Unfavorite</button>
+          <button onclick="location.href='/cctv/chart/unfavorite?big={{big}}&small={{small}}'" type="button" 
+            class="btn btn-warning" style="margin-left:327px; margin-right: auto; display: block;" >unfavorite</button>
           {% endif %}
         {% else %}
-          <button onclick="location.href='/cctv/chart/unfavorite?big={{big}}&small={{small}}'" type="button" class="btn btn-danger" hidden>Unfavorite</button>
+          <button onclick="location.href='/cctv/chart/unfavorite?big={{big}}&small={{small}}'" type="button" 
+            class="btn btn-danger" hidden>Unfavorite</button>
         {% endif %}
       </div>
+
+      <hr width="1250"></hr>
+      <p style="margin-left:700px;"> < CCTV 설치 여부 > </p>
       <div class="box1">
-        <img src="{{graph1}}" />
-        <img src="{{graph2}}" />
-        <img src="{{graph3}}" />
+        <div id="piechart" style="margin-left:500px; margin-right: 500px; margin-top: 100px; margin-bottom: 100px; display: outside;"></div>
+        <hr style="margin-left: 320px; width: 1250px;"></hr>
+        <img src="{{graph2}}" style="margin-left: 350px; margin-right: auto; margin-bottom: 100px; margin-top: 100px; display: outside;"/>
+        <hr style="margin-left: 320px; width: 1250px;"></hr>
+        <p style="margin-left:845px;"> < 시설 유형 별 CCTV설치 현황 > </p>
+        <div id="two_bar_chart" style="margin-left: 350px; margin-right: auto; margin-bottom: 100px; margin-top: 100px; display: outside;"></div> 
+        <hr style="margin-left: 320px; margin-bottom: 100px; width: 1250px;"></hr>
+        
       </div>
 
+
+
+      <script src="https://d3js.org/d3.v3.min.js">
+      </script>     
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js">
+      </script> 
+  
+      <div>
+  
+        <script style="margin-left: 500px;">
+          var pieData = { 
+          Y: '{{y}}',
+          N: '{{n}}',
+        };
+        var chartDonut = c3.generate({
+          bindto: "#piechart",
+          data: {
+            json: [pieData],
+            keys: {
+              value: Object.keys(pieData),
+            },
+            type: "donut",
+          colors: {
+            Y: "#ffc107",
+            N: "#b6b6b6"
+          },
+          donut: {
+          title: "설치 여부",
+          },
+        }});
+
+/////////////////////////////////////////////////////////
+var str1 = '{{sisul_list}}'
+var str2 = '{{sisul_num}}'
+var str3 = '{{sisul_y}}'
+
+str1 = str1.replace(/&#x27;/gi, "'");
+str2 = str2.replace(/&#x27;/gi, "'");
+str3 = str3.replace(/&#x27;/gi, "'");
+var sisul_list = eval(str1)  //문자열로 [1,2,3,4]  => javascript배열로변경
+var sisul_num  = eval(str2)  //문자열로 [1,2,3,4]  => javascript배열로변경
+var sisul_y    = eval(str3)  //문자열로 [1,2,3,4]  => javascript배열로변경
+
+// [num, 1, 1, 1]
+sisul_num.unshift('시설 갯수');
+sisul_y.unshift('설치된 시설 갯수');
+console.log(sisul_num)
+var chart = c3.generate({
+    bindto: '#two_bar_chart',
+    data: {
+        columns: [
+          sisul_num,
+          sisul_y
+        ],
+        type: 'bar',
+        color: {
+          pattern : [ "#ffc107", "#b6b6b6" ]
+    }
+    },
+    bar: {
+        width: {
+            ratio: 0.5 // this makes bar width 50% of length between ticks
+        }
+        
+    },
+    axis: {
+        x: {
+            type: 'category',
+            categories: sisul_list
+        }
+    
+    }
+        // or
+        //width: 100 // this makes bar width 100px
+});
+// var chart = c3.generate({
+//             bindto: '#two_bar_chart',
+//             data: {
+//                 xs: str_xs,
+//                 columns: arr_cl
+//             },
+//             axis: {
+//                 x: {
+//                     type: 'category',
+                    
+//                     tick: {
+//                         format: '%Y-%m-%d'
+//                     },
+//                     rank:{
+//                         reversed:true
+//                     } 
+//                 }
+//             }
+//         });
+      </script>
+
       </div>
+
+   
+
 </body>
 </html>
